@@ -199,90 +199,190 @@ def push_relabel(n, capacity, trace_file):
     
     return max_flow, flow
 
-# Minimum-Cost Flow using Bellman-Ford
+# Minimum-Cost Flow using Bellman-Ford on Residual Graph
 def min_cost_flow(n, capacity, cost, target_flow, trace_file):
     flow = np.zeros((n, n), dtype=int)
     residual = capacity.copy()
     total_flow = 0
     total_cost = 0
+    # Ensure cost matrix matches shape, handle potential non-edges
+    # Cost should be high for non-existent edges if not already handled
+    # We assume cost[i][j] = 0 if capacity[i][j] = 0 initially
     vertices = [chr(ord('s') if i == 0 else ord('t') if i == n-1 else ord('a') + i - 1) for i in range(n)]
-    
+
     with open(trace_file, 'w', encoding='utf-8') as f:
-        f.write("Minimum-Cost Flow Execution Trace\n")
-        display_matrix(capacity, "Capacity table", vertices)
-        display_matrix(cost, "Cost table", vertices)
-        f.write("\nCapacity table:\n")
-        for row in capacity:
-            f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-        f.write("\nCost table:\n")
-        for row in cost:
-            f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-        
+        f.write("Minimum-Cost Flow Execution Trace (Corrected Bellman-Ford)\n")
+        # Display initial state (optional but good for trace)
+        f.write("\nInitial Capacity:\n")
+        # Use display_matrix for consistent output (if desired, or keep simple write)
+        for r in capacity: f.write(" ".join(map(str, r)) + "\n")
+        f.write("\nInitial Cost:\n")
+        for r in cost: f.write(" ".join(map(str, r)) + "\n")
+        f.write("\nTarget Flow: {}\n".format(target_flow))
+
         iteration = 1
         while total_flow < target_flow:
+            # Bellman-Ford on the residual graph to find min-cost path
             dist = [float('inf')] * n
-            dist[0] = 0
             parent = [-1] * n
-            bellman_table = [[float('inf')] * n for _ in range(n + 1)]
-            bellman_table[0] = dist.copy()
-            
-            for k in range(1, n):
+            edge_from = [-1] * n # Track the edge u used to reach v: parent[v] = u
+            dist[0] = 0
+            # Bellman-Ford Table (optional for detailed trace)
+            # bellman_table = [[float('inf')] * n for _ in range(n)]
+            # bellman_table[0] = dist.copy()
+
+            # Run Bellman-Ford for n-1 iterations
+            for k in range(n - 1):
+                updated = False
                 for u in range(n):
-                    bellman_table[k][u] = bellman_table[k-1][u]
+                    if dist[u] == float('inf'): continue # Skip unreachable nodes
+
                     for v in range(n):
-                        if residual[u][v] > 0:
-                            if bellman_table[k-1][v] != float('inf'):
-                                new_dist = bellman_table[k-1][v] + cost[u][v]
-                                if new_dist < bellman_table[k][u]:
-                                    bellman_table[k][u] = new_dist
-                                    parent[u] = v
-                if bellman_table[k] == bellman_table[k-1]:
+                        # Check forward edge (u, v) in residual graph
+                        if residual[u][v] > 0 and dist[u] + cost[u][v] < dist[v]:
+                            dist[v] = dist[u] + cost[u][v]
+                            parent[v] = u
+                            # edge_from[v] = u # Store edge if needed separately
+                            updated = True
+
+                        # Check backward edge (v, u) in residual graph
+                        # This corresponds to flow previously pushed u -> v
+                        # Residual capacity exists on (v, u), cost is -cost[u][v]
+                        if residual[v][u] > 0 and dist[v] - cost[u][v] < dist[u]:
+                             # This relaxation seems wrong, Bellman-Ford relaxes edges *from* reachable nodes
+                             # Let's reconsider the relaxation structure. Iterate through all potential edges.
+                             pass # Re-evaluating the standard Bellman-Ford relaxation below
+
+            # Corrected Bellman-Ford Relaxation Loop
+            dist = [float('inf')] * n
+            parent = [-1] * n
+            dist[0] = 0
+            bellman_table = [[float('inf')] * n for _ in range(n)] # For trace
+            bellman_table[0] = dist.copy()
+
+            for k in range(1, n): # Iterate n-1 times
+                bellman_table[k] = bellman_table[k-1].copy() # Start with previous distances
+                updated_in_iter = False
+                for u in range(n):
+                    for v in range(n):
+                        # Edge (u, v) - Forward in original graph
+                        if residual[u][v] > 0 and bellman_table[k-1][u] != float('inf'):
+                            new_dist_v = bellman_table[k-1][u] + cost[u][v]
+                            if new_dist_v < bellman_table[k][v]:
+                                bellman_table[k][v] = new_dist_v
+                                parent[v] = u
+                                updated_in_iter = True
+
+                        # Edge (u, v) - Backward in original graph (means edge v->u used)
+                        # Residual capacity exists on u->v if flow was pushed v->u
+                        # Cost is -cost[v][u]
+                        # Need original cost[v][u]
+                        if residual[u][v] > 0 and capacity[u][v] == 0 and capacity[v][u] > 0: # Check if it's purely a backward edge residual
+                           if bellman_table[k-1][u] != float('inf'):
+                               # Make sure cost[v][u] exists if accessing it
+                               neg_cost_vu = -cost[v][u] if cost[v][u] != 0 else float('inf') # Handle potential 0 cost for non-edge
+                               if neg_cost_vu != float('inf'):
+                                   new_dist_v = bellman_table[k-1][u] + neg_cost_vu
+                                   if new_dist_v < bellman_table[k][v]:
+                                       bellman_table[k][v] = new_dist_v
+                                       parent[v] = u
+                                       updated_in_iter = True
+
+                if not updated_in_iter: # Optimization: stop if no changes
+                    # Fill rest of table for display if needed
+                    for fill_k in range(k + 1, n):
+                        bellman_table[fill_k] = bellman_table[k]
                     break
-            
-            f.write(f"\nBellman-Ford table for iteration {iteration}:\n")
-            display_matrix(np.array(bellman_table[:k+1]), f"Bellman-Ford table iteration {iteration}", vertices)
-            f.write("\n")
-            for row in bellman_table[:k+1]:
-                f.write(" ".join(f"{x:>4}" if x != float('inf') else "  inf" for x in row) + "\n")
-            
-            if parent[n-1] == -1:
-                f.write("No augmenting path found.\n")
+            # Final distances are in bellman_table[k] or bellman_table[n-1]
+            final_dist = bellman_table[min(k, n-1)] # Use distances from last effective iteration
+
+            # Write Bellman table to trace
+            f.write(f"\n--- Iteration {iteration} ---\n")
+            f.write("Bellman-Ford Distances (Rows: Iteration k, Cols: Nodes):\n")
+            # Use display_matrix if adapted, otherwise simple print
+            f.write("     " + " ".join(f"{lbl:>5}" for lbl in vertices) + "\n")
+            for k_row, row_data in enumerate(bellman_table[:min(k, n-1)+1]):
+                 f.write(f"k={k_row:<2} [" + " ".join(f"{x:5.0f}" if x != float('inf') else "  inf" for x in row_data) + " ]\n")
+
+            # Check for negative cycles (optional but good practice)
+            # Run one more iteration check
+            # ...
+
+            # If sink is unreachable, break
+            if final_dist[n-1] == float('inf'):
+                f.write("\nSink node t is unreachable. No more augmenting paths.\n")
                 break
-            
+
+            # Reconstruct path from parent array
             path = []
-            v = n - 1
-            while v != 0:
-                u = parent[v]
-                path.append((u, v))
-                v = u
+            curr = n - 1
+            while curr != 0:
+                prev = parent[curr]
+                if prev == -1:
+                    # Should not happen if final_dist[n-1] is not inf and s=0
+                    f.write("\nError reconstructing path.\n")
+                    path = None # Indicate error
+                    break
+                path.append((prev, curr))
+                curr = prev
+            
+            if path is None: break # Stop if path reconstruction failed
             path.reverse()
-            
-            path_flow = min(residual[u][v] for u, v in path)
-            path_flow = min(path_flow, target_flow - total_flow)
-            
+
+            # Find path flow capacity and cost
+            path_flow = float('inf')
+            path_cost_per_unit = final_dist[n-1] # Bellman-Ford gives shortest path cost
+
             for u, v in path:
-                flow[u][v] += path_flow
+                path_flow = min(path_flow, residual[u][v])
+
+            # Limit flow by remaining target flow
+            path_flow = min(path_flow, target_flow - total_flow)
+
+            if path_flow <= 0: # Should not happen if target_flow not met and path exists
+                f.write("\nPath found but path flow is zero. Stopping.\n")
+                break
+
+            # Augment flow and update residual graph/costs
+            total_flow += path_flow
+            total_cost += path_flow * path_cost_per_unit # Use cost from Bellman-Ford
+
+            path_str = "".join(vertices[u] for u, _ in path) + vertices[path[-1][1]]
+            f.write(f"\nFound Min-Cost Path: {path_str}")
+            f.write(f"\nPath Cost per unit: {path_cost_per_unit}, Path Flow: {path_flow}")
+            f.write(f"\nTotal Flow so far: {total_flow}, Total Cost so far: {total_cost}")
+
+            for u, v in path:
                 residual[u][v] -= path_flow
                 residual[v][u] += path_flow
-                total_cost += path_flow * cost[u][v]
-            
-            total_flow += path_flow
-            path_str = "".join(vertices[u] for u, _ in path) + vertices[path[-1][1]]
-            f.write(f"\nAugmenting path: {path_str} with flow {path_flow}\n")
-            f.write("Updated residual graph:\n")
-            display_matrix(residual, f"Residual graph iteration {iteration}", vertices)
-            for row in residual:
-                f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-            
+
+                # Update net flow matrix (careful: flow[u][v] is net flow u->v)
+                if capacity[u][v] > 0: # Edge (u,v) exists in original graph
+                    flow[u][v] += path_flow
+                else: # Edge (u,v) must be backward residual of original (v,u)
+                    flow[v][u] -= path_flow # Decrease flow on original edge v->u
+
+            f.write("\nUpdated Residual Graph:\n")
+            # Use display_matrix or simple print
+            for r in residual: f.write(" ".join(map(str, r)) + "\n")
+
             iteration += 1
-        
-        f.write(f"\nFinal flow:\n")
-        display_matrix(flow, "Final flow", vertices)
-        for row in flow:
-            f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-        f.write(f"\nTotal flow: {total_flow}, Total cost: {total_cost}\n")
-    
+            # Safety break for potential infinite loops if target_flow is huge or unreachable
+            if iteration > n * n : # Heuristic limit
+                 f.write("\nWarning: Exceeded iteration limit. Stopping.\n")
+                 break
+
+        f.write("\n--- Algorithm End ---\n")
+        f.write(f"\nFinal Net Flow Matrix:\n")
+        # Use display_matrix or simple print
+        for r in flow: f.write(" ".join(map(str, r)) + "\n")
+        f.write(f"\nAchieved Total Flow: {total_flow}\n")
+        f.write(f"Minimum Total Cost: {total_cost}\n")
+
     return total_flow, total_cost, flow
+
+
+
 
 # Function to generate random flow problem
 def generate_random_flow_problem(n):

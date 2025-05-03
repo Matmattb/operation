@@ -1,8 +1,8 @@
 import numpy as np
-from collections import deque
 import time
 import random
 import matplotlib.pyplot as plt
+
 
 # Function to read flow network from .txt file
 def read_flow_network(filename):
@@ -10,13 +10,25 @@ def read_flow_network(filename):
         lines = f.readlines()
     n = int(lines[0].strip())
     capacity = np.zeros((n, n), dtype=int)
+    cost = None
+    
+    # Lire la première matrice (capacity)
     for i in range(n):
         row = list(map(int, lines[i + 1].strip().split()))
         for j in range(n):
             capacity[i][j] = row[j]
-    return n, capacity
+    
+    # Vérifier s'il y a une deuxième matrice (cost)
+    if len(lines) > n + 1:
+        cost = np.zeros((n, n), dtype=int)
+        for i in range(n):
+            row = list(map(int, lines[i + n + 1].strip().split()))
+            for j in range(n):
+                cost[i][j] = row[j]
+    
+    return n, capacity, cost
 
-# Function to display a matrix (capacity, cost, or Bellman’s table)
+# Function to display a matrix (capacity, cost, or Bellman's table)
 def display_matrix(matrix, title, labels=None):
     print(f"\n{title}:")
     n = matrix.shape[0]
@@ -30,175 +42,8 @@ def display_matrix(matrix, title, labels=None):
         for row in matrix:
             print(" ".join(f"{x:>2}" for x in row))
 
-# Ford-Fulkerson with Edmonds-Karp (BFS for shortest augmenting paths)
-def ford_fulkerson(n, capacity, trace_file):
-    flow = np.zeros((n, n), dtype=int)
-    residual = capacity.copy()
-    max_flow = 0
-    vertices = [chr(ord('s') if i == 0 else ord('t') if i == n-1 else ord('a') + i - 1) for i in range(n)]
 
-    with open(trace_file, 'w', encoding='utf-8') as f:
-        f.write("Ford-Fulkerson Execution Trace\n")
-        display_matrix(residual, "Capacity table display", vertices)
-        f.write("\nCapacity table display:\n")
-        for row in residual:
-            f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-        f.write("\nThe initial residual graph is the starting graph.\n")
-
-        iteration = 1
-        while True:
-            parent = [-1] * n
-            parent[0] = -2
-            queue = deque([0])
-            path_flow = float('inf')
-            path = []
-            
-            while queue:
-                u = queue.popleft()
-                for v in range(n):
-                    if parent[v] == -1 and residual[u][v] > 0:
-                        parent[v] = u
-                        queue.append(v)
-                        if v == n - 1:
-                            break
-            
-            if parent[n - 1] == -1:
-                break
-            
-            f.write(f"\n* Iteration {iteration}:\n\nBreadth-first search:\n")
-            queue = deque([0])
-            visited = {0}
-            bfs_trace = []
-            while queue:
-                u = queue.popleft()
-                neighbors = []
-                for v in range(n):
-                    if residual[u][v] > 0 and v not in visited:
-                        neighbors.append(vertices[v])
-                        visited.add(v)
-                        queue.append(v)
-                if neighbors:
-                    bfs_trace.append(f"{vertices[u]}{''.join(neighbors)};")
-                    for v in range(n):
-                        if residual[u][v] > 0 and parent[v] == u:
-                            f.write(f"    Π({vertices[v]})={vertices[u]}\n")
-            
-            f.write("\n".join(bfs_trace) + "\n")
-            
-            v = n - 1
-            while v != 0:
-                u = parent[v]
-                path_flow = min(path_flow, residual[u][v])
-                path.append((u, v))
-                v = u
-            path.reverse()
-            
-            for u, v in path:
-                residual[u][v] -= path_flow
-                residual[v][u] += path_flow
-                flow[u][v] += path_flow
-            
-            max_flow += path_flow
-            path_str = "".join(vertices[u] for u, _ in path) + vertices[path[-1][1]]
-            f.write(f"Detection of an improving chain: {path_str} with a flow {path_flow}.\n")
-            f.write("\nModifications to the residual graph:\n")
-            display_matrix(residual, f"Residual graph after iteration {iteration}", vertices)
-            for row in residual:
-                f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-            
-            iteration += 1
-        
-        f.write("\n* Max flow display:\n")
-        flow_display = np.zeros((n, n), dtype=object)
-        for i in range(n):
-            for j in range(n):
-                flow_display[i][j] = f"{flow[i][j]}/{capacity[i][j]}" if capacity[i][j] > 0 else "0"
-        display_matrix(flow_display, "Max flow display", vertices)
-        for row in flow_display:
-            f.write(" ".join(f"{x:>5}" for x in row) + "\n")
-        f.write(f"\nValue of the max flow = {max_flow}\n")
-    
-    return max_flow, flow
-
-# Push-Relabel algorithm
-def push_relabel(n, capacity, trace_file):
-    flow = np.zeros((n, n), dtype=int)
-    excess = [0] * n
-    height = [0] * n
-    height[0] = n
-    residual = capacity.copy()
-    vertices = [chr(ord('s') if i == 0 else ord('t') if i == n-1 else ord('a') + i - 1) for i in range(n)]
-    
-    with open(trace_file, 'w', encoding='utf-8') as f:
-        f.write("Push-Relabel Execution Trace\n")
-        display_matrix(capacity, "Initial capacity table", vertices)
-        f.write("\nInitial capacity table:\n")
-        for row in capacity:
-            f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-        
-        for v in range(n):
-            if capacity[0][v] > 0:
-                flow[0][v] = capacity[0][v]
-                residual[0][v] = 0
-                residual[v][0] = capacity[0][v]
-                excess[v] = capacity[0][v]
-                excess[0] -= capacity[0][v]
-        
-        f.write("\nAfter initialization:\n")
-        f.write(f"Excess: {excess}\n")
-        f.write(f"Heights: {height}\n")
-        
-        iteration = 1
-        while any(e > 0 for e in excess[1:n-1]):
-            max_height = -1
-            u = -1
-            for i in range(1, n-1):
-                if excess[i] > 0 and height[i] > max_height:
-                    max_height = height[i]
-                    u = i
-                elif excess[i] > 0 and height[i] == max_height and u != -1:
-                    if vertices[i] < vertices[u]:
-                        u = i
-            if u == -1:
-                break
-            
-            pushed = False
-            for v in [n-1] + sorted(range(n), key=lambda x: vertices[x]):
-                if v != u and residual[u][v] > 0 and height[u] == height[v] + 1:
-                    push_flow = min(excess[u], residual[u][v])
-                    flow[u][v] += push_flow
-                    residual[u][v] -= push_flow
-                    residual[v][u] += push_flow
-                    excess[u] -= push_flow
-                    excess[v] += push_flow
-                    pushed = True
-                    f.write(f"\nIteration {iteration}: Push {push_flow} from {vertices[u]} to {vertices[v]}\n")
-                    f.write(f"Excess: {excess}\n")
-                    f.write(f"Heights: {height}\n")
-                    break
-            
-            if not pushed:
-                min_height = float('inf')
-                for v in range(n):
-                    if residual[u][v] > 0:
-                        min_height = min(min_height, height[v])
-                if min_height != float('inf'):
-                    height[u] = 1 + min_height
-                    f.write(f"\nIteration {iteration}: Relabel {vertices[u]} to height {height[u]}\n")
-                    f.write(f"Excess: {excess}\n")
-                    f.write(f"Heights: {height}\n")
-            
-            iteration += 1
-        
-        max_flow = sum(flow[i][n-1] for i in range(n))
-        f.write("\nFinal flow:\n")
-        display_matrix(flow, "Final flow", vertices)
-        for row in flow:
-            f.write(" ".join(f"{x:>2}" for x in row) + "\n")
-        f.write(f"\nMaximum flow value: {max_flow}\n")
-    
-    return max_flow, flow
-
+"""
 # Minimum-Cost Flow using Bellman-Ford on Residual Graph
 def min_cost_flow(n, capacity, cost, target_flow, trace_file):
     flow = np.zeros((n, n), dtype=int)
@@ -463,41 +308,4 @@ def complexity_analysis():
     plt.xscale('log')
     plt.savefig('ff_vs_pr_ratio.png')
     plt.close()
-
-# Main program
-def main():
-    while True:
-        problem_num = input("Enter problem number (1-10, or 'exit' to quit): ")
-        if problem_num.lower() == 'exit':
-            break
-        problem_num = int(problem_num)
-        filename = f"proposal_{problem_num}.txt"
-        
-        n, capacity = read_flow_network(filename)
-        vertices = [chr(ord('s') if i == 0 else ord('t') if i == n-1 else ord('a') + i - 1) for i in range(n)]
-        
-        print("Running Ford-Fulkerson...")
-        max_flow_ff, flow_ff = ford_fulkerson(n, capacity, f"B4-trace{problem_num}-FF.txt")
-        print(f"Ford-Fulkerson Max Flow: {max_flow_ff}")
-        
-        print("Running Push-Relabel...")
-        max_flow_pr, flow_pr = push_relabel(n, capacity, f"B4-trace{problem_num}-PR.txt")
-        print(f"Push-Relabel Max Flow: {max_flow_pr}")
-        
-        cost = np.random.randint(1, 10, size=(n, n)) * (capacity > 0)
-        target_flow = max_flow_ff // 2
-        print(f"Running Min-Cost Flow with target flow {target_flow}...")
-        total_flow, total_cost, flow_min = min_cost_flow(n, capacity, cost, target_flow, f"B4-trace{problem_num}-MIN.txt")
-        print(f"Min-Cost Flow: Total Flow = {total_flow}, Total Cost = {total_cost}")
-        
-        display_matrix(capacity, "Capacity Matrix", vertices)
-        display_matrix(cost, "Cost Matrix", vertices)
-        display_matrix(flow_ff, "Ford-Fulkerson Flow", vertices)
-        display_matrix(flow_pr, "Push-Relabel Flow", vertices)
-        display_matrix(flow_min, "Min-Cost Flow", vertices)
-    
-    print("Running complexity analysis...")
-    complexity_analysis()
-
-if __name__ == "__main__":
-    main()
+"""

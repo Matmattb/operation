@@ -1,0 +1,86 @@
+Ford-Fulkerson Execution Trace
+
+Capacity table display:
+ 0  4  2  0  0  0
+ 0  0  0  4  0  1
+ 0  0  0  4  2  0
+ 0  0  0  0  2  2
+ 0  0  0  0  0  2
+ 0  0  0  0  0  0
+
+The initial residual graph is the starting graph.
+
+* Iteration 1:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=a
+    Π(t)=a
+    Π(d)=b
+sab;
+act;
+bd;
+Detection of an improving chain: sat with a flow 1.
+
+Modifications to the residual graph:
+ 0  3  2  0  0  0
+ 1  0  0  4  0  0
+ 0  0  0  4  2  0
+ 0  0  0  0  2  2
+ 0  0  0  0  0  2
+ 0  1  0  0  0  0
+
+* Iteration 2:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=a
+    Π(d)=b
+    Π(t)=c
+sab;
+ac;
+bd;
+ct;
+Detection of an improving chain: sact with a flow 2.
+
+Modifications to the residual graph:
+ 0  1  2  0  0  0
+ 3  0  0  2  0  0
+ 0  0  0  4  2  0
+ 0  2  0  0  2  0
+ 0  0  0  0  0  2
+ 0  1  0  2  0  0
+
+* Iteration 3:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=a
+    Π(d)=b
+    Π(t)=d
+sab;
+ac;
+bd;
+dt;
+Detection of an improving chain: sbdt with a flow 2.
+
+Modifications to the residual graph:
+ 0  1  0  0  0  0
+ 3  0  0  2  0  0
+ 2  0  0  4  0  0
+ 0  2  0  0  2  0
+ 0  0  2  0  0  0
+ 0  1  0  2  2  0
+
+* Max flow display:
+    0   3/4   2/2     0     0     0
+    0     0     0   2/4     0   1/1
+    0     0     0   0/4   2/2     0
+    0     0     0     0   0/2   2/2
+    0     0     0     0     0   2/2
+    0     0     0     0     0     0
+
+Value of the max flow = 5

@@ -1,0 +1,162 @@
+Ford-Fulkerson Execution Trace
+
+Capacity table display:
+ 0  9  5  7  0  0  0  0
+ 0  0  6  0  6  0  0  0
+ 0  0  0  0  0  7  0  0
+ 0  0  0  0  0  2  8  0
+ 0  0  3  0  0  0  0  8
+ 0  0  0  0  0  0  0 10
+ 0  0  0  0  0  3  0  5
+ 0  0  0  0  0  0  0  0
+
+The initial residual graph is the starting graph.
+
+* Iteration 1:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(d)=a
+    Π(e)=b
+    Π(f)=c
+    Π(t)=d
+sabc;
+ad;
+be;
+cf;
+dt;
+Detection of an improving chain: sadt with a flow 6.
+
+Modifications to the residual graph:
+ 0  3  5  7  0  0  0  0
+ 6  0  6  0  0  0  0  0
+ 0  0  0  0  0  7  0  0
+ 0  0  0  0  0  2  8  0
+ 0  6  3  0  0  0  0  2
+ 0  0  0  0  0  0  0 10
+ 0  0  0  0  0  3  0  5
+ 0  0  0  0  6  0  0  0
+
+* Iteration 2:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(e)=b
+    Π(f)=c
+    Π(t)=e
+    Π(d)=t
+sabc;
+be;
+cf;
+et;
+td;
+Detection of an improving chain: sbet with a flow 5.
+
+Modifications to the residual graph:
+ 0  3  0  7  0  0  0  0
+ 6  0  6  0  0  0  0  0
+ 5  0  0  0  0  2  0  0
+ 0  0  0  0  0  2  8  0
+ 0  6  3  0  0  0  0  2
+ 0  0  5  0  0  0  0  5
+ 0  0  0  0  0  3  0  5
+ 0  0  0  0  6  5  0  0
+
+* Iteration 3:
+
+Breadth-first search:
+    Π(a)=s
+    Π(c)=s
+    Π(b)=a
+    Π(e)=c
+    Π(f)=c
+    Π(t)=e
+    Π(d)=t
+sac;
+ab;
+cef;
+et;
+td;
+Detection of an improving chain: scet with a flow 2.
+
+Modifications to the residual graph:
+ 0  3  0  5  0  0  0  0
+ 6  0  6  0  0  0  0  0
+ 5  0  0  0  0  2  0  0
+ 2  0  0  0  0  0  8  0
+ 0  6  3  0  0  0  0  2
+ 0  0  5  2  0  0  0  3
+ 0  0  0  0  0  3  0  5
+ 0  0  0  0  6  7  0  0
+
+* Iteration 4:
+
+Breadth-first search:
+    Π(a)=s
+    Π(c)=s
+    Π(b)=a
+    Π(f)=c
+    Π(e)=b
+    Π(t)=f
+    Π(d)=t
+sac;
+ab;
+cf;
+be;
+ft;
+td;
+Detection of an improving chain: scft with a flow 5.
+
+Modifications to the residual graph:
+ 0  3  0  0  0  0  0  0
+ 6  0  6  0  0  0  0  0
+ 5  0  0  0  0  2  0  0
+ 7  0  0  0  0  0  3  0
+ 0  6  3  0  0  0  0  2
+ 0  0  5  2  0  0  0  3
+ 0  0  0  5  0  3  0  0
+ 0  0  0  0  6  7  5  0
+
+* Iteration 5:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=a
+    Π(e)=b
+    Π(c)=e
+    Π(t)=e
+    Π(f)=c
+    Π(d)=t
+sa;
+ab;
+be;
+ect;
+cf;
+td;
+Detection of an improving chain: sabet with a flow 2.
+
+Modifications to the residual graph:
+ 0  1  0  0  0  0  0  0
+ 8  0  4  0  0  0  0  0
+ 5  2  0  0  0  0  0  0
+ 7  0  0  0  0  0  3  0
+ 0  6  3  0  0  0  0  2
+ 0  0  7  2  0  0  0  1
+ 0  0  0  5  0  3  0  0
+ 0  0  0  0  6  9  5  0
+
+* Max flow display:
+    0   8/9   5/5   7/7     0     0     0     0
+    0     0   2/6     0   6/6     0     0     0
+    0     0     0     0     0   7/7     0     0
+    0     0     0     0     0   2/2   5/8     0
+    0     0   0/3     0     0     0     0   6/8
+    0     0     0     0     0     0     0  9/10
+    0     0     0     0     0   0/3     0   5/5
+    0     0     0     0     0     0     0     0
+
+Value of the max flow = 20

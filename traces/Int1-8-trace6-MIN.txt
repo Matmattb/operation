@@ -1,0 +1,46 @@
+Minimum-Cost Flow Execution Trace
+
+Capacity table display:
+ 0  4  2  0  0  0
+ 0  0  0  4  0  1
+ 0  0  0  4  2  0
+ 0  0  0  0  2  2
+ 0  0  0  0  0  2
+ 0  0  0  0  0  0
+
+Cost table display:
+ 0  3  1  0  0  0
+ 0  0  0  2  0  4
+ 0  0  0  1  5  0
+ 0  0  0  0  3  1
+ 0  0  0  0  0  6
+ 0  0  0  0  0  0
+
+The initial residual graph is the starting graph.
+
+* Iteration 1:
+| k | a | b | c | d | e | f
+ 0 | |  0 |  3a |  1a |  2c |  5d |  3d
+ 1 | |  0 |  3a |  1a |  2c |  5d |  3d
+Detection of an improving chain: scdf with a flow 2.
+
+Modifications to the residual graph:
+ 0  4  0  0  0  0
+ 0  0  0  4  0  1
+ 2  0  0  2  2  0
+ 0  0  2  0  2  0
+ 0  0  0  0  0  2
+ 0  0  0  2  0  0
+
+Cost of this path: 6
+
+* Min-cost flow display:
+    0   0/4   2/2     0     0     0
+    0     0     0   0/4     0   0/1
+    0     0     0   2/4   0/2     0
+    0     0     0     0   0/2   2/2
+    0     0     0     0     0   0/2
+    0     0     0     0     0     0
+
+Total flow value = 2
+Total cost = 6

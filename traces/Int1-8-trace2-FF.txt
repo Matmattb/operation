@@ -1,0 +1,246 @@
+Ford-Fulkerson Execution Trace
+
+Capacity table display:
+ 0 16  3  8  0  0  0  0  0  0
+ 0  0  3  0  3  3  4  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 0  0  0  0  0  0  0  0  7  0
+ 0  0  0  0  0  0  1  8  0  0
+ 0  0  0  0  8  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  8
+ 0  0  0  0  0  0  3  0  4  6
+ 0  0  0  0  0  4  0  0  0  8
+ 0  0  0  0  0  0  0  0  0  0
+
+The initial residual graph is the starting graph.
+
+* Iteration 1:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(d)=a
+    Π(e)=a
+    Π(f)=a
+    Π(h)=c
+    Π(g)=d
+    Π(t)=f
+sabc;
+adef;
+ch;
+dg;
+ft;
+Detection of an improving chain: saft with a flow 4.
+
+Modifications to the residual graph:
+ 0 12  3  8  0  0  0  0  0  0
+ 4  0  3  0  3  3  0  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 0  0  0  0  0  0  0  0  7  0
+ 0  0  0  0  0  0  1  8  0  0
+ 0  0  0  0  8  0  0  0  0  0
+ 0  4  0  0  0  0  0  0  0  4
+ 0  0  0  0  0  0  3  0  4  6
+ 0  0  0  0  0  4  0  0  0  8
+ 0  0  0  0  0  0  4  0  0  0
+
+* Iteration 2:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(d)=a
+    Π(e)=a
+    Π(h)=c
+    Π(f)=d
+    Π(g)=d
+    Π(t)=h
+sabc;
+ade;
+ch;
+dfg;
+ht;
+Detection of an improving chain: scht with a flow 7.
+
+Modifications to the residual graph:
+ 0 12  3  1  0  0  0  0  0  0
+ 4  0  3  0  3  3  0  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 7  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  1  8  0  0
+ 0  0  0  0  8  0  0  0  0  0
+ 0  4  0  0  0  0  0  0  0  4
+ 0  0  0  0  0  0  3  0  4  6
+ 0  0  0  7  0  4  0  0  0  1
+ 0  0  0  0  0  0  4  0  7  0
+
+* Iteration 3:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(d)=a
+    Π(e)=a
+    Π(f)=d
+    Π(g)=d
+    Π(t)=f
+    Π(h)=g
+sabc;
+ade;
+dfg;
+ft;
+gh;
+Detection of an improving chain: sadft with a flow 1.
+
+Modifications to the residual graph:
+ 0 11  3  1  0  0  0  0  0  0
+ 5  0  3  0  2  3  0  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 7  0  0  0  0  0  0  0  0  0
+ 0  1  0  0  0  0  0  8  0  0
+ 0  0  0  0  8  0  0  0  0  0
+ 0  4  0  0  1  0  0  0  0  3
+ 0  0  0  0  0  0  3  0  4  6
+ 0  0  0  7  0  4  0  0  0  1
+ 0  0  0  0  0  0  5  0  7  0
+
+* Iteration 4:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(d)=a
+    Π(e)=a
+    Π(g)=d
+    Π(f)=g
+    Π(h)=g
+    Π(t)=g
+sabc;
+ade;
+dg;
+gfht;
+Detection of an improving chain: sadgt with a flow 2.
+
+Modifications to the residual graph:
+ 0  9  3  1  0  0  0  0  0  0
+ 7  0  3  0  0  3  0  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 7  0  0  0  0  0  0  0  0  0
+ 0  3  0  0  0  0  0  6  0  0
+ 0  0  0  0  8  0  0  0  0  0
+ 0  4  0  0  1  0  0  0  0  3
+ 0  0  0  0  2  0  3  0  4  4
+ 0  0  0  7  0  4  0  0  0  1
+ 0  0  0  0  0  0  5  2  7  0
+
+* Iteration 5:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(e)=a
+    Π(d)=e
+    Π(g)=d
+    Π(f)=g
+    Π(h)=g
+    Π(t)=g
+sabc;
+ae;
+ed;
+dg;
+gfht;
+Detection of an improving chain: saedgt with a flow 3.
+
+Modifications to the residual graph:
+ 0  6  3  1  0  0  0  0  0  0
+10  0  3  0  0  0  0  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 7  0  0  0  0  0  0  0  0  0
+ 0  3  0  0  0  3  0  3  0  0
+ 0  3  0  0  5  0  0  0  0  0
+ 0  4  0  0  1  0  0  0  0  3
+ 0  0  0  0  5  0  3  0  4  1
+ 0  0  0  7  0  4  0  0  0  1
+ 0  0  0  0  0  0  5  5  7  0
+
+* Iteration 6:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(e)=b
+    Π(d)=e
+    Π(g)=d
+    Π(f)=g
+    Π(h)=g
+    Π(t)=g
+sabc;
+be;
+ed;
+dg;
+gfht;
+Detection of an improving chain: sbedgt with a flow 1.
+
+Modifications to the residual graph:
+ 0  6  2  1  0  0  0  0  0  0
+10  0  3  0  0  0  0  0  0  0
+ 1  0  0  7  0  4  0  0  0  0
+ 7  0  0  0  0  0  0  0  0  0
+ 0  3  0  0  0  4  0  2  0  0
+ 0  3  1  0  4  0  0  0  0  0
+ 0  4  0  0  1  0  0  0  0  3
+ 0  0  0  0  6  0  3  0  4  0
+ 0  0  0  7  0  4  0  0  0  1
+ 0  0  0  0  0  0  5  6  7  0
+
+* Iteration 7:
+
+Breadth-first search:
+    Π(a)=s
+    Π(b)=s
+    Π(c)=s
+    Π(e)=b
+    Π(d)=e
+    Π(g)=d
+    Π(f)=g
+    Π(h)=g
+    Π(t)=f
+sabc;
+be;
+ed;
+dg;
+gfh;
+ft;
+Detection of an improving chain: sbedgft with a flow 2.
+
+Modifications to the residual graph:
+ 0  6  0  1  0  0  0  0  0  0
+10  0  3  0  0  0  0  0  0  0
+ 3  0  0  7  0  2  0  0  0  0
+ 7  0  0  0  0  0  0  0  0  0
+ 0  3  0  0  0  6  0  0  0  0
+ 0  3  3  0  2  0  0  0  0  0
+ 0  4  0  0  1  0  0  2  0  1
+ 0  0  0  0  8  0  1  0  4  0
+ 0  0  0  7  0  4  0  0  0  1
+ 0  0  0  0  0  0  7  6  7  0
+
+* Max flow display:
+    0 10/16   3/3   7/8     0     0     0     0     0     0
+    0     0   0/3     0   3/3   3/3   4/4     0     0     0
+    0     0     0   0/7     0   3/5     0     0     0     0
+    0     0     0     0     0     0     0     0   7/7     0
+    0     0     0     0     0     0   1/1   8/8     0     0
+    0     0     0     0   6/8     0     0     0     0     0
+    0     0     0     0     0     0     0     0     0   7/8
+    0     0     0     0     0     0   2/3     0   0/4   6/6
+    0     0     0     0     0   0/4     0     0     0   7/8
+    0     0     0     0     0     0     0     0     0     0
+
+Value of the max flow = 20

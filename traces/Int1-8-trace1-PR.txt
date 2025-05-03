@@ -1,0 +1,283 @@
+Push-Relabel Execution Trace
+
+Initial capacity table:
+ 0  9  5  7  0  0  0  0
+ 0  0  6  0  6  0  0  0
+ 0  0  0  0  0  7  0  0
+ 0  0  0  0  0  2  8  0
+ 0  0  3  0  0  0  0  8
+ 0  0  0  0  0  0  0 10
+ 0  0  0  0  0  3  0  5
+ 0  0  0  0  0  0  0  0
+
+After initialization:
+Excess: [np.int64(-21), np.int64(9), np.int64(5), np.int64(7), 0, 0, 0, 0]
+Heights: [8, 0, 0, 0, 0, 0, 0, 0]
+
+Iteration 1: Relabel a to height 1
+Excess: [np.int64(-21), np.int64(9), np.int64(5), np.int64(7), 0, 0, 0, 0]
+Heights: [8, 1, 0, 0, 0, 0, 0, 0]
+
+Iteration 2: Push 6 from a to b
+Excess: [np.int64(-21), np.int64(3), np.int64(11), np.int64(7), 0, 0, 0, 0]
+Heights: [8, 1, 0, 0, 0, 0, 0, 0]
+
+Iteration 3: Push 3 from a to d
+Excess: [np.int64(-21), np.int64(0), np.int64(11), np.int64(7), np.int64(3), 0, 0, 0]
+Heights: [8, 1, 0, 0, 0, 0, 0, 0]
+
+Iteration 4: Relabel b to height 1
+Excess: [np.int64(-21), np.int64(0), np.int64(11), np.int64(7), np.int64(3), 0, 0, 0]
+Heights: [8, 1, 1, 0, 0, 0, 0, 0]
+
+Iteration 5: Push 7 from b to e
+Excess: [np.int64(-21), np.int64(0), np.int64(4), np.int64(7), np.int64(3), np.int64(7), 0, 0]
+Heights: [8, 1, 1, 0, 0, 0, 0, 0]
+
+Iteration 6: Relabel b to height 2
+Excess: [np.int64(-21), np.int64(0), np.int64(4), np.int64(7), np.int64(3), np.int64(7), 0, 0]
+Heights: [8, 1, 2, 0, 0, 0, 0, 0]
+
+Iteration 7: Push 4 from b to a
+Excess: [np.int64(-21), np.int64(4), np.int64(0), np.int64(7), np.int64(3), np.int64(7), 0, 0]
+Heights: [8, 1, 2, 0, 0, 0, 0, 0]
+
+Iteration 8: Push 3 from a to d
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 1, 2, 0, 0, 0, 0, 0]
+
+Iteration 9: Relabel a to height 3
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 3, 2, 0, 0, 0, 0, 0]
+
+Iteration 10: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 3, 2, 0, 0, 0, 0, 0]
+
+Iteration 11: Relabel b to height 4
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 3, 4, 0, 0, 0, 0, 0]
+
+Iteration 12: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 3, 4, 0, 0, 0, 0, 0]
+
+Iteration 13: Relabel a to height 5
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 5, 4, 0, 0, 0, 0, 0]
+
+Iteration 14: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 5, 4, 0, 0, 0, 0, 0]
+
+Iteration 15: Relabel b to height 6
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 5, 6, 0, 0, 0, 0, 0]
+
+Iteration 16: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 5, 6, 0, 0, 0, 0, 0]
+
+Iteration 17: Relabel a to height 7
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 7, 6, 0, 0, 0, 0, 0]
+
+Iteration 18: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 7, 6, 0, 0, 0, 0, 0]
+
+Iteration 19: Relabel b to height 8
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 7, 8, 0, 0, 0, 0, 0]
+
+Iteration 20: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 7, 8, 0, 0, 0, 0, 0]
+
+Iteration 21: Relabel a to height 9
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 9, 8, 0, 0, 0, 0, 0]
+
+Iteration 22: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 9, 8, 0, 0, 0, 0, 0]
+
+Iteration 23: Relabel b to height 10
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 9, 10, 0, 0, 0, 0, 0]
+
+Iteration 24: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 9, 10, 0, 0, 0, 0, 0]
+
+Iteration 25: Relabel a to height 11
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 11, 10, 0, 0, 0, 0, 0]
+
+Iteration 26: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 11, 10, 0, 0, 0, 0, 0]
+
+Iteration 27: Relabel b to height 12
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 11, 12, 0, 0, 0, 0, 0]
+
+Iteration 28: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 11, 12, 0, 0, 0, 0, 0]
+
+Iteration 29: Relabel a to height 13
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 13, 12, 0, 0, 0, 0, 0]
+
+Iteration 30: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 13, 12, 0, 0, 0, 0, 0]
+
+Iteration 31: Relabel b to height 14
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 13, 14, 0, 0, 0, 0, 0]
+
+Iteration 32: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 13, 14, 0, 0, 0, 0, 0]
+
+Iteration 33: Relabel a to height 15
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 15, 14, 0, 0, 0, 0, 0]
+
+Iteration 34: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 15, 14, 0, 0, 0, 0, 0]
+
+Iteration 35: Relabel b to height 16
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 15, 16, 0, 0, 0, 0, 0]
+
+Iteration 36: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 15, 16, 0, 0, 0, 0, 0]
+
+Iteration 37: Relabel a to height 17
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 17, 16, 0, 0, 0, 0, 0]
+
+Iteration 38: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 17, 16, 0, 0, 0, 0, 0]
+
+Iteration 39: Relabel b to height 18
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 17, 18, 0, 0, 0, 0, 0]
+
+Iteration 40: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 17, 18, 0, 0, 0, 0, 0]
+
+Iteration 41: Relabel a to height 19
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 19, 18, 0, 0, 0, 0, 0]
+
+Iteration 42: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 19, 18, 0, 0, 0, 0, 0]
+
+Iteration 43: Relabel b to height 20
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 19, 20, 0, 0, 0, 0, 0]
+
+Iteration 44: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 19, 20, 0, 0, 0, 0, 0]
+
+Iteration 45: Relabel a to height 21
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 21, 20, 0, 0, 0, 0, 0]
+
+Iteration 46: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 21, 20, 0, 0, 0, 0, 0]
+
+Iteration 47: Relabel b to height 22
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 21, 22, 0, 0, 0, 0, 0]
+
+Iteration 48: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 21, 22, 0, 0, 0, 0, 0]
+
+Iteration 49: Relabel a to height 23
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 23, 22, 0, 0, 0, 0, 0]
+
+Iteration 50: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 23, 22, 0, 0, 0, 0, 0]
+
+Iteration 51: Relabel b to height 24
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 23, 24, 0, 0, 0, 0, 0]
+
+Iteration 52: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 23, 24, 0, 0, 0, 0, 0]
+
+Iteration 53: Relabel a to height 25
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 25, 24, 0, 0, 0, 0, 0]
+
+Iteration 54: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 25, 24, 0, 0, 0, 0, 0]
+
+Iteration 55: Relabel b to height 26
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 25, 26, 0, 0, 0, 0, 0]
+
+Iteration 56: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 25, 26, 0, 0, 0, 0, 0]
+
+Iteration 57: Relabel a to height 27
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 27, 26, 0, 0, 0, 0, 0]
+
+Iteration 58: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 27, 26, 0, 0, 0, 0, 0]
+
+Iteration 59: Relabel b to height 28
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 27, 28, 0, 0, 0, 0, 0]
+
+Iteration 60: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 27, 28, 0, 0, 0, 0, 0]
+
+Iteration 61: Relabel a to height 29
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 29, 28, 0, 0, 0, 0, 0]
+
+Iteration 62: Push 1 from a to b
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 29, 28, 0, 0, 0, 0, 0]
+
+Iteration 63: Relabel b to height 30
+Excess: [np.int64(-21), np.int64(0), np.int64(1), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 29, 30, 0, 0, 0, 0, 0]
+
+Iteration 64: Push 1 from b to a
+Excess: [np.int64(-21), np.int64(1), np.int64(0), np.int64(7), np.int64(6), np.int64(7), 0, 0]
+Heights: [8, 29, 30, 0, 0, 0, 0, 0]
+
+Final flow:
+ 0  9  5  7  0  0  0  0
+ 0  0 20  0  6  0  0  0
+ 0 18  0  0  0  7  0  0
+ 0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0
+
+Maximum flow value: 0

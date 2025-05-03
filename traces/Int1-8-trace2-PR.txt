@@ -1,0 +1,51 @@
+Push-Relabel Execution Trace
+
+Initial capacity table:
+ 0 16  3  8  0  0  0  0  0  0
+ 0  0  3  0  3  3  4  0  0  0
+ 0  0  0  7  0  5  0  0  0  0
+ 0  0  0  0  0  0  0  0  7  0
+ 0  0  0  0  0  0  1  8  0  0
+ 0  0  0  0  8  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  8
+ 0  0  0  0  0  0  3  0  4  6
+ 0  0  0  0  0  4  0  0  0  8
+ 0  0  0  0  0  0  0  0  0  0
+
+After initialization:
+Excess: [np.int64(-27), np.int64(16), np.int64(3), np.int64(8), 0, 0, 0, 0, 0, 0]
+Heights: [10, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Iteration 1: Relabel a to height 1
+Excess: [np.int64(-27), np.int64(16), np.int64(3), np.int64(8), 0, 0, 0, 0, 0, 0]
+Heights: [10, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Iteration 2: Push 3 from a to b
+Excess: [np.int64(-27), np.int64(13), np.int64(6), np.int64(8), 0, 0, 0, 0, 0, 0]
+Heights: [10, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Iteration 3: Push 3 from a to d
+Excess: [np.int64(-27), np.int64(10), np.int64(6), np.int64(8), np.int64(3), 0, 0, 0, 0, 0]
+Heights: [10, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Iteration 4: Push 3 from a to e
+Excess: [np.int64(-27), np.int64(7), np.int64(6), np.int64(8), np.int64(3), np.int64(3), 0, 0, 0, 0]
+Heights: [10, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Iteration 5: Push 4 from a to f
+Excess: [np.int64(-27), np.int64(3), np.int64(6), np.int64(8), np.int64(3), np.int64(3), np.int64(4), 0, 0, 0]
+Heights: [10, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+
+Final flow:
+ 0 16  3  8  0  0  0  0  0  0
+ 0  0  3  0  3  3  4  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+ 0  0  0  0  0  0  0  0  0  0
+
+Maximum flow value: 0
